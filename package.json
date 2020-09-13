@@ -1,0 +1,102 @@
+{
+  "name": "wafflecrypt",
+  "version": "1.0.0",
+  "description": "Simple (probably stupid) encryption/decryption for browsers and node",
+  "main": "dist/node/wafflecrypt.js",
+  "umd": "dist/browser/wafflecrypt.umd.js",
+  "browser": "dist/browser/wafflecrypt.esm.js",
+  "typings": "dist/typings/wafflecrypt.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "prebuild": "rm -rf dist",
+    "build": "npm run build:node && npm run build:browser",
+    "prebuild:node": "rm -rf dist/node",
+    "build:node": "microbundle -i src/node/index.ts -o dist/node --no-compress --target node --format cjs,esm",
+    "prebuild:browser": "rm -rf dist/browser",
+    "build:browser": "microbundle -i src/browser/index.ts -o dist/browser",
+    "test": "tsdx test",
+    "lint": "tsdx lint src",
+    "posttest": "npm run lint",
+    "prepublishOnly": "tsdx build && npm test",
+    "coverage": "tsdx test --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rexxars/wafflecrypt.git"
+  },
+  "keywords": [
+    "encrypt",
+    "decrypt",
+    "crypto",
+    "browser"
+  ],
+  "author": "Espen Hovlandsdal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rexxars/wafflecrypt/issues"
+  },
+  "homepage": "https://github.com/rexxars/wafflecrypt#readme",
+  "dependencies": {
+    "asn1.js": "^5.4.1"
+  },
+  "devDependencies": {
+    "@peculiar/webcrypto": "^1.1.3",
+    "@types/jest": "^26.0.13",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-sanity": "^1.149.0",
+    "microbundle": "^0.12.3",
+    "prettier": "^2.0.5",
+    "tsdx": "^0.13.2",
+    "typescript": "^3.0.0"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "singleQuote": true
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "browser": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "prettier/@typescript-eslint",
+      "sanity",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": "error",
+      "operator-linebreak": "off",
+      "no-use-before-define": "off",
+      "@typescript-eslint/no-use-before-define": "off"
+    },
+    "plugins": [
+      "@typescript-eslint",
+      "prettier"
+    ]
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    },
+    "setupFiles": [
+      "./test/setup/browser.setup.ts"
+    ]
+  }
+}
