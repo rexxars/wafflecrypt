@@ -1,6 +1,6 @@
 import {publicEncrypt, constants} from 'crypto'
 import {Key} from '../types'
-import {getKeyObject} from './utils'
+import {getKeyObject} from './keys'
 
 export async function encrypt(key: Key, content: Buffer): Promise<Buffer> {
   const encrypted = await publicEncrypt(
