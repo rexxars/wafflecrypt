@@ -1,3 +1,4 @@
+import {extractPemKey} from '../shared/pem'
 import {Jwk, Key} from '../types'
 import {base64ToArrayBuffer} from './buffer'
 
@@ -31,7 +32,7 @@ export async function getKeyObject(key: Key, isPublicKey = false): Promise<Crypt
   if (typeof key === 'string') {
     keyObj = await window.crypto.subtle.importKey(
       isPublicKey ? 'spki' : 'pkcs8',
-      extractPemKey(key),
+      base64ToArrayBuffer(extractPemKey(key)),
       algorithm,
       false,
       usage
@@ -49,15 +50,4 @@ export async function getKeyObject(key: Key, isPublicKey = false): Promise<Crypt
   cache.input = key
   cache.output = keyObj
   return keyObj
-}
-
-function extractPemKey(pem: string) {
-  const lines = pem
-    .toString()
-    .split(/(\r\n|\r|\n)+/g)
-    .filter((line) => line.trim().length !== 0)
-
-  const body = lines.slice(1, -1).join('')
-  const base64 = body.replace(/[^\w\d+/=]+/g, '')
-  return base64ToArrayBuffer(base64)
 }

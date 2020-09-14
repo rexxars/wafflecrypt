@@ -1,6 +1,16 @@
+export interface PemKeyPair {
+  publicKey: string
+  privateKey: string
+}
+
+export interface JwkKeyPair {
+  publicKey: Jwk
+  privateKey: Jwk
+}
+
 export interface Jwk {
   alg?: 'RSA-OAEP-256'
-  kty: 'RSA'
+  kty: string
 
   crv?: string
   d?: string
