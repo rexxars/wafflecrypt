@@ -27,7 +27,7 @@ export async function decrypt(
   const data = typeof content === 'string' ? base64ToArrayBuffer(content) : content
   const key = await getKeyObject(privateKey)
   const buf = await window.crypto.subtle.decrypt({name: 'RSA-OAEP'}, key, data)
-  return options?.encoding ? textDecoder.decode(buf) : buf
+  return options && options.encoding ? textDecoder.decode(buf) : buf
 }
 
 type DecryptOptions = {encoding?: BufferEncoding}

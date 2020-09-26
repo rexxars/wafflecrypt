@@ -20,13 +20,13 @@
     "prebuild": "rm -rf dist",
     "build": "npm run build:node && npm run build:browser",
     "prebuild:node": "rm -rf dist/node",
-    "build:node": "microbundle -i src/node/index.ts -o dist/node --no-compress --target node --format cjs,esm",
+    "build:node": "microbundle -i src/node/index.ts -o dist/node --no-compress --target node --format cjs",
     "prebuild:browser": "rm -rf dist/browser",
     "build:browser": "microbundle -i src/browser/index.ts -o dist/browser",
     "test": "tsdx test",
     "lint": "tsdx lint src",
     "posttest": "npm run lint",
-    "prepublishOnly": "tsdx build && npm test",
+    "prepublishOnly": "npm run build && npm test",
     "coverage": "tsdx test --coverage"
   },
   "repository": {

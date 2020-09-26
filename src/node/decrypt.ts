@@ -31,7 +31,7 @@ export async function decrypt(
     typeof content === 'string' ? Buffer.from(content, 'base64') : content
   )
 
-  return options?.encoding ? decrypted.toString(options.encoding) : decrypted
+  return options && options.encoding ? decrypted.toString(options.encoding) : decrypted
 }
 
 type DecryptOptions = {encoding?: BufferEncoding}
