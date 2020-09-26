@@ -1,5 +1,7 @@
 # wafflecrypt
 
+[![npm version](https://img.shields.io/npm/v/wafflecrypt.svg?style=flat-square)](https://www.npmjs.com/package/wafflecrypt)[![npm bundle size](https://img.shields.io/bundlephobia/minzip/wafflecrypt?style=flat-square)](https://bundlephobia.com/result?p=wafflecrypt)
+
 Simple, opinionated (probably stupid) encryption/decryption.
 
 Works in modern browsers that supports the [SubtleCrypto API](https://caniuse.com/mdn-api_crypto_subtle) and node.js >= 12.9.
