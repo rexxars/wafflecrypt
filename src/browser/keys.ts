@@ -1,4 +1,4 @@
-import {extractPemKey} from '../shared/pem'
+import {extractPemKey, inferType as inferPemType} from '../shared/pem'
 import {Jwk, Key} from '../types'
 import {base64ToArrayBuffer} from './buffer'
 
@@ -20,34 +20,56 @@ const keyCache: KeyCache = {
 const algorithm = {name: 'RSA-OAEP', hash: 'SHA-256'}
 
 export async function getKeyObject(key: Key, isPublicKey = false): Promise<CryptoKey> {
-  const type = isPublicKey ? 'public' : 'private'
+  const expectedType = isPublicKey ? 'public' : 'private'
   const bucket = typeof key === 'string' ? 'pem' : 'jwk'
-  const cache = keyCache[bucket][type]
+  const cache = keyCache[bucket][expectedType]
   if (cache.input === key && cache.output) {
     return cache.output
   }
 
+  const type = inferType(key)
+  if (type && expectedType !== type) {
+    throw new Error(`Invalid ${expectedType} key - received a ${type} key`)
+  }
+
   const usage: ('encrypt' | 'decrypt')[] = [isPublicKey ? 'encrypt' : 'decrypt']
   let keyObj
-  if (typeof key === 'string') {
-    keyObj = await window.crypto.subtle.importKey(
-      isPublicKey ? 'spki' : 'pkcs8',
-      base64ToArrayBuffer(extractPemKey(key)),
-      algorithm,
-      false,
-      usage
-    )
-  } else {
-    keyObj = await window.crypto.subtle.importKey(
-      'jwk', // Yay
-      key,
-      algorithm,
-      false,
-      usage
-    )
+
+  try {
+    if (typeof key === 'string') {
+      keyObj = await window.crypto.subtle.importKey(
+        type === 'public' ? 'spki' : 'pkcs8',
+        base64ToArrayBuffer(extractPemKey(key)),
+        algorithm,
+        false,
+        usage
+      )
+    } else {
+      keyObj = await window.crypto.subtle.importKey(
+        'jwk', // Yay
+        key,
+        algorithm,
+        false,
+        usage
+      )
+    }
+  } catch (err) {
+    throw new Error(`Invalid ${expectedType} key: ${err.message}`)
   }
 
   cache.input = key
   cache.output = keyObj
   return keyObj
+}
+
+function inferType(key: Key): 'public' | 'private' | undefined {
+  if (typeof key === 'string') {
+    return inferPemType(key)
+  }
+
+  if (!key.d && !key.alg) {
+    return undefined
+  }
+
+  return key.d ? 'private' : 'public'
 }

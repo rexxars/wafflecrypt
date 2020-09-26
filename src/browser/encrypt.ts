@@ -1,4 +1,5 @@
 import {Key} from '../types'
+import {stringToArrayBuffer} from './buffer'
 import {getKeyObject} from './keys'
 
 export type EncryptableInput =
@@ -16,9 +17,9 @@ export type EncryptableInput =
   | DataView
   | ArrayBuffer
 
-export async function encrypt(key: Key, content: EncryptableInput): Promise<ArrayBuffer> {
-  const data = typeof content === 'string' ? new TextEncoder().encode(content) : content
-  const keyObj = await getKeyObject(key, true)
+export async function encrypt(publicKey: Key, content: EncryptableInput): Promise<ArrayBuffer> {
+  const data = typeof content === 'string' ? stringToArrayBuffer(content) : content
+  const keyObj = await getKeyObject(publicKey, true)
   const buf = await window.crypto.subtle.encrypt({name: 'RSA-OAEP'}, keyObj, data)
   return buf
 }

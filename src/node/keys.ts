@@ -1,4 +1,5 @@
 import {createPrivateKey, createPublicKey, KeyObject} from 'crypto'
+import {inferType} from '../shared/pem'
 import {Jwk, Key} from '../types'
 import {pemFromJwk} from './rsa'
 
@@ -18,18 +19,26 @@ const keyCache: KeyCache = {
 }
 
 export function getKeyObject(key: Key, isPublicKey = false): KeyObject {
-  const type = isPublicKey ? 'public' : 'private'
+  const expectedType = isPublicKey ? 'public' : 'private'
   const bucket = typeof key === 'string' ? 'pem' : 'jwk'
-  const cache = keyCache[bucket][type]
+  const cache = keyCache[bucket][expectedType]
   if (cache.input === key && cache.output) {
     return cache.output
   }
 
-  const pemKey = typeof key === 'string' ? key : pemFromJwk(key)
-  const keyObj = isPublicKey ? createPublicKey(pemKey) : createPrivateKey(pemKey)
+  const {pem, type} = typeof key === 'string' ? {pem: key, type: inferType(key)} : pemFromJwk(key)
+  if (type && expectedType !== type) {
+    throw new Error(`Invalid ${expectedType} key - received a ${type} key`)
+  }
 
-  cache.input = key
-  cache.output = keyObj
+  try {
+    const keyObj = isPublicKey ? createPublicKey(pem) : createPrivateKey(pem)
 
-  return keyObj
+    cache.input = key
+    cache.output = keyObj
+
+    return keyObj
+  } catch (err) {
+    throw new Error(`Invalid ${expectedType} key: ${err.message}`)
+  }
 }

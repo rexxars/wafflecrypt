@@ -27,11 +27,11 @@ interface JwkData {
   qi: Buffer | null
 }
 
-export function pemFromJwk(key: Jwk): string {
+export function pemFromJwk(key: Jwk): {pem: string; type: 'private' | 'public'} {
   const data = getJwkData(key)
   return key.d
-    ? RSAPrivateKey.encode(data, 'pem', {label: 'RSA PRIVATE KEY'})
-    : publicKeyFromJwk(data)
+    ? {type: 'private', pem: RSAPrivateKey.encode(data, 'pem', {label: 'RSA PRIVATE KEY'})}
+    : {type: 'public', pem: publicKeyFromJwk(data)}
 }
 
 export function jwkFromPem(pem: string): Jwk {

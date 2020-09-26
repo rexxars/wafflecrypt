@@ -8,6 +8,10 @@ export function stringToArrayBuffer(str: string): ArrayBuffer {
   return buf
 }
 
+export function arrayBufferToString(buffer: ArrayBuffer): string {
+  return String.fromCharCode.apply(null, Array.from(new Uint8Array(buffer)))
+}
+
 export function base64ToArrayBuffer(base64: string): ArrayBuffer {
   const binary = atob(base64)
   const len = binary.length
@@ -16,4 +20,14 @@ export function base64ToArrayBuffer(base64: string): ArrayBuffer {
     bytes[i] = binary.charCodeAt(i)
   }
   return bytes.buffer
+}
+
+export function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer)
+  const length = bytes.byteLength
+  let binary = ''
+  for (let i = 0; i < length; i++) {
+    binary += String.fromCharCode(bytes[i])
+  }
+  return window.btoa(binary)
 }

@@ -13,3 +13,8 @@ export function extractPemKey(pem: string): string {
 
   return lines.join('').replace(/[^\w\d+/=]+/g, '')
 }
+
+export function inferType(pem: string): 'public' | 'private' | undefined {
+  const [, type] = pem.match(/---BEGIN .*?(PUBLIC|PRIVATE)/) || []
+  return type ? (type.toLowerCase() as 'public' | 'private') : undefined
+}

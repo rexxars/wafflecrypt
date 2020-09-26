@@ -4,6 +4,7 @@
   "description": "Simple (probably stupid) encryption/decryption for browsers and node",
   "main": "dist/node/wafflecrypt.js",
   "umd": "dist/browser/wafflecrypt.umd.js",
+  "module": "dist/browser/wafflecrypt.esm.js",
   "browser": "dist/browser/wafflecrypt.esm.js",
   "typings": "dist/typings/wafflecrypt.d.ts",
   "sideEffects": false,
@@ -53,7 +54,7 @@
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-config-sanity": "^1.149.0",
+    "eslint-config-sanity": "^1.150.8",
     "microbundle": "^0.12.3",
     "prettier": "^2.0.5",
     "tsdx": "^0.13.2",
@@ -81,8 +82,7 @@
     "rules": {
       "prettier/prettier": "error",
       "operator-linebreak": "off",
-      "no-use-before-define": "off",
-      "@typescript-eslint/no-use-before-define": "off"
+      "no-use-before-define": "off"
     },
     "plugins": [
       "@typescript-eslint",

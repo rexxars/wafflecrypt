@@ -8,9 +8,14 @@ export interface JwkKeyPair {
   privateKey: Jwk
 }
 
+export interface KeyPair {
+  pem: PemKeyPair
+  jwk: JwkKeyPair
+}
+
 export interface Jwk {
-  alg?: 'RSA-OAEP-256'
-  kty: string
+  alg?: string
+  kty?: string
 
   crv?: string
   d?: string
