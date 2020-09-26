@@ -49,7 +49,16 @@ export async function generateKeyPair({type, modulusLength = 4096}: Options = {}
 function wrap(key: ArrayBuffer, type: 'PUBLIC' | 'PRIVATE'): string {
   return [
     `-----BEGIN ${type} KEY-----`,
-    btoa(arrayBufferToString(key)),
+    cap(btoa(arrayBufferToString(key))),
     `-----END ${type} KEY-----`,
   ].join('\n')
+}
+
+function cap(pem: string): string {
+  const numLines = Math.ceil(pem.length / 64)
+  const lines = new Array(numLines)
+  for (let i = 0; i < numLines; i++) {
+    lines[i] = pem.slice(i * 64, (i + 1) * 64)
+  }
+  return lines.join('\n')
 }
