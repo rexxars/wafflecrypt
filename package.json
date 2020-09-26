@@ -1,6 +1,6 @@
 {
   "name": "wafflecrypt",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple (probably stupid) encryption/decryption for browsers and node",
   "main": "dist/node/wafflecrypt.js",
   "umd": "dist/browser/wafflecrypt.umd.js",
