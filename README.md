@@ -1,6 +1,6 @@
 # wafflecrypt
 
-[![npm version](https://img.shields.io/npm/v/wafflecrypt.svg?style=flat-square)](https://www.npmjs.com/package/wafflecrypt)[![npm bundle size](https://img.shields.io/bundlephobia/minzip/wafflecrypt?style=flat-square)](https://bundlephobia.com/result?p=wafflecrypt)
+[![npm version](https://img.shields.io/npm/v/wafflecrypt.svg?style=flat-square)](https://www.npmjs.com/package/wafflecrypt)[![npm bundle size](https://img.shields.io/bundlephobia/minzip/wafflecrypt?style=flat-square)](https://bundlephobia.com/result?p=wafflecrypt)[![Build Status](https://img.shields.io/travis/com/rexxars/wafflecrypt/main.svg?style=flat-square)](https://travis-ci.com/github/rexxars/wafflecrypt)
 
 Simple, opinionated (probably stupid) encryption/decryption.
 
