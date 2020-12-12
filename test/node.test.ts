@@ -10,6 +10,12 @@ test('encrypt/decrypt (jwk object)', async () => {
   expect(decrypted.equals(testBuffer))
 })
 
+test('encrypt/decrypt with private key (jwk object)', async () => {
+  const encrypted = await encrypt(privateKeyJwk, testBuffer)
+  const decrypted = await decrypt(privateKeyJwk, encrypted)
+  expect(decrypted.equals(testBuffer))
+})
+
 test('encrypt/decrypt (pem string)', async () => {
   const encrypted = await encrypt(publicKeyPem, testBuffer)
   const decrypted = await decrypt(privateKeyPem, encrypted)

@@ -27,9 +27,18 @@ interface JwkData {
   qi: Buffer | null
 }
 
-export function pemFromJwk(key: Jwk): {pem: string; type: 'private' | 'public'} {
+export function pemFromJwk(
+  key: Jwk,
+  targetType: 'private' | 'public'
+): {pem: string; type: 'private' | 'public'} {
   const data = getJwkData(key)
-  return key.d
+  const isPrivate = Boolean(key.d)
+
+  if (targetType === 'private' && !isPrivate) {
+    throw new Error('Invalid private key - received a public key')
+  }
+
+  return targetType === 'private'
     ? {type: 'private', pem: RSAPrivateKey.encode(data, 'pem', {label: 'RSA PRIVATE KEY'})}
     : {type: 'public', pem: publicKeyFromJwk(data)}
 }

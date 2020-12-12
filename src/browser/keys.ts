@@ -28,7 +28,7 @@ export async function getKeyObject(key: Key, isPublicKey = false): Promise<Crypt
   }
 
   const type = inferType(key)
-  if (type && expectedType !== type) {
+  if (type && expectedType === 'private' && expectedType !== type) {
     throw new Error(`Invalid ${expectedType} key - received a ${type} key`)
   }
 
@@ -45,9 +45,12 @@ export async function getKeyObject(key: Key, isPublicKey = false): Promise<Crypt
         usage
       )
     } else {
+      const keyProps =
+        expectedType === 'public' && type === 'private' ? publicFromPrivate(key) : key
+
       keyObj = await window.crypto.subtle.importKey(
         'jwk', // Yay
-        key,
+        keyProps,
         algorithm,
         false,
         usage
@@ -72,4 +75,9 @@ function inferType(key: Key): 'public' | 'private' | undefined {
   }
 
   return key.d ? 'private' : 'public'
+}
+
+function publicFromPrivate(priv: Jwk) {
+  const {alg, e, ext, kty, n} = priv
+  return {alg, e, ext, kty, n}
 }

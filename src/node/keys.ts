@@ -26,7 +26,9 @@ export function getKeyObject(key: Key, isPublicKey = false): KeyObject {
     return cache.output
   }
 
-  const {pem, type} = typeof key === 'string' ? {pem: key, type: inferType(key)} : pemFromJwk(key)
+  const {pem, type} =
+    typeof key === 'string' ? {pem: key, type: inferType(key)} : pemFromJwk(key, expectedType)
+
   if (type && expectedType !== type) {
     throw new Error(`Invalid ${expectedType} key - received a ${type} key`)
   }
